@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de Serviço</title>
+</head>
+<body>
+    <h1>Seleção de Serviço</h1>
+    <form id="serviceForm">
+        <label for="vscode">VSCode</label>
+        <input type="radio" id="vscode" name="service" value="vscode">
+
+        <label for="wordpress">WordPress</label>
+        <input type="radio" id="wordpress" name="service" value="wordpress">
+
+        <button type="button" onclick="redirect()">Configurar</button>
+    </form>
+
+    <script>
+        function redirect() {
+            const form = document.getElementById('serviceForm');
+            const selectedService = form.querySelector('input[name="service"]:checked');
+
+            if (selectedService) {
+                const serviceName = selectedService.value;
+                const port = getServicePort(serviceName);
+                window.location.href = `http://localhost:${port}`;
+            } else {
+                alert('Por favor, selecione um serviço antes de configurar.');
+            }
+        }
+
+        function getServicePort(serviceName) {
+            switch (serviceName) {
+                case 'vscode':
+                    return 8083; // Porta do VSCode
+                case 'wordpress':
+                    return 8082; // Porta do WordPress
+                default:
+                    return 8080; // Porta padrão do HTTPD
+            }
+        }
+    </script>
+</body>
+</html>
