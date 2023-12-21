@@ -28,14 +28,14 @@ services:
     image: wordpress:latest
     restart: always
     ports:
-      - "8082:80"  # Mapeia a porta 80 do container para a porta 8080 do host
+      - "8082:80"  
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wordpressuser
       WORDPRESS_DB_PASSWORD: wordpresspassword
       WORDPRESS_DB_NAME: wordpress
     volumes:
-      - ./wordpress:/var/www/html  # Mapeia o diretório local para o diretório do WordPress no container
+      - ./wordpress:/var/www/html  
     depends_on:
       - db
     networks:
