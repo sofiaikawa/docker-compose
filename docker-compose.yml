@@ -1,0 +1,63 @@
+services:
+  web:
+    image: httpd:latest
+    restart: always
+    ports: 
+      - "8080:80"
+    volumes:
+      - ./website:/usr/local/apache2/htdocs
+    depends_on:
+      - db
+      - vscode
+      - wordpress
+    links:
+      - db
+      - vscode
+      - wordpress
+
+  vscode:
+    image: codercom/code-server:latest
+    ports:
+      - "8083:8080"
+    environment:
+      - PASSWORD=mysecretpassword
+    networks:
+      - app_net
+
+  wordpress:
+    image: wordpress:latest
+    restart: always
+    ports:
+      - "8082:80"  # Mapeia a porta 80 do container para a porta 8080 do host
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpressuser
+      WORDPRESS_DB_PASSWORD: wordpresspassword
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress:/var/www/html  # Mapeia o diretório local para o diretório do WordPress no container
+    depends_on:
+      - db
+    networks:
+      - app_net
+
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpressuser
+      MYSQL_PASSWORD: wordpresspassword
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - app_net
+
+
+networks:
+  app_net:
+    driver: bridge
+
+volumes:
+  db_vol:
